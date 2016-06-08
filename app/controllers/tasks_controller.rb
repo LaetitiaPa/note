@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :find_note, only: [:show, :edit, :update, :destroy]
+  before_action :find_task, only: [:show, :edit, :update, :destroy]
   
   def index
     @tasks = Task.all.order('created_at DESC')
@@ -26,14 +26,21 @@ class TasksController < ApplicationController
   end
   
   def update
+    if @task.update(task_params)
+      redirect_to @task
+    else
+      render 'edit'
+    end
   end
   
   def destroy
+    @task.destroy
+    redirect_to tasks_path
   end
   
   private
   
-  def find_note
+  def find_task
     @task = Task.find(params[:id])
   end
   
